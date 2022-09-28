@@ -40,3 +40,13 @@ class ConstantInput(nn.Module):
         batch = x.shape[0]
         out = self.input.repeat(batch, 1, 1, 1)
         return out
+        
+
+class NoiseInjection(nn.Module):
+    def __init__(self, channel):
+        super().__init__()
+
+        self.weight = nn.Parameter(torch.zeros(1, channel, 1, 1))
+
+    def forward(self, image, noise):
+        return image + self.weight * noise
