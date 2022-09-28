@@ -24,7 +24,7 @@ class ScaleWeights:
         setattr(module, self.name, weight)
 
 
-def equal_lr(module, name='weight'):
+def scale_weights(module, name='weight'):
     ScaleWeights.apply(module, name)
 
     return module
