@@ -52,7 +52,8 @@ class NoiseInjection(nn.Module):
 
     def forward(self, image, noise):
         return image + self.weight * noise
-        
+
+
 class AdaptiveInstanceNorm(nn.Module):
     def __init__(self, in_channel, style_dim):
         super().__init__()
@@ -129,3 +130,56 @@ class Blur(nn.Module):
 
     def forward(self, input):
         return blur(input, self.weight, self.weight_flip)
+
+
+class StyledConvBlock(nn.Module):
+    def __init__(
+        self,
+        in_channel,
+        out_channel,
+        kernel_size=3,
+        padding=1,
+        style_dim=512,
+        initial=False,
+        upsample=False
+    ):
+        super().__init__()
+
+        if initial:
+            self.conv1 = ConstantInput(in_channel)
+
+        else:
+            if upsample:
+                self.conv1 = nn.Sequential(
+                    nn.Upsample(scale_factor=2, mode='nearest'),
+                    ScaledConv2d(
+                        in_channel, out_channel, kernel_size, padding=padding
+                    ),
+                    Blur(out_channel),
+                )
+            else:
+                self.conv1 = ScaledConv2d(
+                    in_channel, out_channel, kernel_size, padding=padding
+                )
+
+        self.noise1 = NoiseInjection(out_channel)
+        self.adain1 = AdaptiveInstanceNorm(out_channel, style_dim)
+        self.lrelu1 = nn.LeakyReLU(0.2)
+
+        self.conv2 = ScaledConv2d(out_channel, out_channel, kernel_size, padding=padding)
+        self.noise2 = NoiseInjection(out_channel)
+        self.adain2 = AdaptiveInstanceNorm(out_channel, style_dim)
+        self.lrelu2 = nn.LeakyReLU(0.2)
+
+    def forward(self, x, style, noise):
+        out = self.conv1(x)
+        out = self.noise1(out, noise)
+        out = self.lrelu1(out)
+        out = self.adain1(out, style)
+
+        out = self.conv2(out)
+        out = self.noise2(out, noise)
+        out = self.lrelu2(out)
+        out = self.adain2(out, style)
+
+        return out

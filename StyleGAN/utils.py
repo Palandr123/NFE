@@ -1,3 +1,7 @@
+import math
+import torch.nn as nn
+
+
 class ScaleWeights:
     def __init__(self, name):
         self.name = name
@@ -6,7 +10,7 @@ class ScaleWeights:
         weight = getattr(module, self.name + '_orig')
         fan_in = weight.data.size(1) * weight.data[0][0].numel()
 
-        return weight * sqrt(2 / fan_in)
+        return weight * math.sqrt(2 / fan_in)
         
     @staticmethod
     def apply(module, name):
