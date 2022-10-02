@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from layers import EqualLinear, EqualConv2d, StyledConvBlock, ConvBlock
+from .layers import EqualLinear, EqualConv2d, StyledConvBlock, ConvBlock
 
 
 class Generator(nn.Module):

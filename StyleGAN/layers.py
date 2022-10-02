@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Function
-from utils import equal_lr
+from .utils import equal_lr
 
 
 class EqualLinear(nn.Module):
