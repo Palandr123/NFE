@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from layers import ScaledLinear, ScaledConv2d, StyledConvBlock
+from layers import ScaledLinear, ScaledConv2d, StyledConvBlock, ConvBlock
 
 
 class Generator(nn.Module):
@@ -35,3 +35,23 @@ class Generator(nn.Module):
         for i, conv in enumerate(self.progression):
             out = self.progression[i](out, styles, noise[i])
         return self.to_rgb(out)
+
+
+class Discriminator(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv = nn.Sequential(
+            ScaledConv2d(3, 16, 1),
+            nn.LeakyReLU(0.2),
+            ConvBlock(16, 32, 3, 1, downsample=True),
+            ConvBlock(32, 64, 3, 1, downsample=True),
+            ConvBlock(64, 128, 3, 1, downsample=True),
+            ConvBlock(128, 256, 3, 1, downsample=True),
+            ScaledConv2d(256, 256, 4, padding=0),
+            nn.LeakyReLU(0.2),
+        )
+        self.linear = nn.Linear(256, 1)
+
+    def forward(self, x):
+        x = self.conv(x).reshape(x.size(0), -1)
+        return torch.sigmoid(self.linear(x))
