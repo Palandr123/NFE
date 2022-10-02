@@ -183,3 +183,39 @@ class StyledConvBlock(nn.Module):
         out = self.adain2(out, style)
 
         return out
+
+
+class ConvBlock(nn.Module):
+    def __init__(
+        self,
+        in_channel,
+        out_channel,
+        kernel_size,
+        padding,
+        downsample=False
+    ):
+        super().__init__()
+        self.conv1 = nn.Sequential(
+            ScaledConv2d(in_channel, out_channel, kernel_size, padding=padding),
+            nn.LeakyReLU(0.2),
+        )
+
+        if downsample:
+            self.conv2 = nn.Sequential(
+                Blur(out_channel),
+                ScaledConv2d(out_channel, out_channel, kernel_size, padding=padding),
+                nn.AvgPool2d(2),
+                nn.LeakyReLU(0.2),
+            )
+
+        else:
+            self.conv2 = nn.Sequential(
+                ScaledConv2d(out_channel, out_channel, kernel_size, padding=padding),
+                nn.LeakyReLU(0.2),
+            )
+
+    def forward(self, input):
+        out = self.conv1(input)
+        out = self.conv2(out)
+
+        return out
