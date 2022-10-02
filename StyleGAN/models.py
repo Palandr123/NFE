@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from layers import ScaledLinear, ScaledConv2d, StyledConvBlock, ConvBlock
+from layers import EqualLinear, EqualConv2d, StyledConvBlock, ConvBlock
 
 
 class Generator(nn.Module):
@@ -8,7 +8,7 @@ class Generator(nn.Module):
         super(Generator, self).__init__()
         layers = []
         for i in range(n_linear):
-            layers.append(ScaledLinear(z_dim, z_dim))
+            layers.append(EqualLinear(z_dim, z_dim))
             layers.append(nn.LeakyReLU(0.2))
         self.style = nn.Sequential(*layers)
         self.progression = nn.ModuleList(
@@ -20,7 +20,7 @@ class Generator(nn.Module):
               StyledConvBlock(64, 32, 3, 1, upsample=True),
             ]
         )
-        self.to_rgb = ScaledConv2d(32, 3, 1)
+        self.to_rgb = EqualConv2d(32, 3, 1)
 
     def forward(self, x, noise=None, step=0):
         batch = x.size(0)
@@ -41,13 +41,13 @@ class Discriminator(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv = nn.Sequential(
-            ScaledConv2d(3, 16, 1),
+            EqualConv2d(3, 16, 1),
             nn.LeakyReLU(0.2),
             ConvBlock(16, 32, 3, 1, downsample=True),
             ConvBlock(32, 64, 3, 1, downsample=True),
             ConvBlock(64, 128, 3, 1, downsample=True),
             ConvBlock(128, 256, 3, 1, downsample=True),
-            ScaledConv2d(256, 256, 4, padding=0),
+            EqualConv2d(256, 256, 4, padding=0),
             nn.LeakyReLU(0.2),
         )
         self.linear = nn.Linear(256, 1)

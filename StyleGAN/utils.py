@@ -2,7 +2,7 @@ import math
 import torch.nn as nn
 
 
-class ScaleWeights:
+class EqualLR:
     def __init__(self, name):
         self.name = name
 
@@ -14,7 +14,7 @@ class ScaleWeights:
         
     @staticmethod
     def apply(module, name):
-        fn = ScaleWeights(name)
+        fn = EqualLR(name)
 
         weight = getattr(module, name)
         del module._parameters[name]
@@ -28,7 +28,7 @@ class ScaleWeights:
         setattr(module, self.name, weight)
 
 
-def scale_weights(module, name='weight'):
-    ScaleWeights.apply(module, name)
+def equal_lr(module, name='weight'):
+    EqualLR.apply(module, name)
 
     return module

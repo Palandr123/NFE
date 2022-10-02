@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Function
-from utils import scale_weights
+from utils import equal_lr
 
 
-class ScaledLinear(nn.Module):
+class EqualLinear(nn.Module):
     def __init__(self, in_dim, out_dim):
         super().__init__()
 
@@ -13,20 +13,20 @@ class ScaledLinear(nn.Module):
         linear.weight.data.normal_()
         linear.bias.data.zero_()
 
-        self.linear = scale_weights(linear)
+        self.linear = equal_lr(linear)
 
     def forward(self, x):
         return self.linear(x)
         
 
-class ScaledConv2d(nn.Module):
+class EqualConv2d(nn.Module):
     def __init__(self, *args, **kwargs):
         super().__init__()
 
         conv = nn.Conv2d(*args, **kwargs)
         conv.weight.data.normal_()
         conv.bias.data.zero_()
-        self.conv = scale_weights(conv)
+        self.conv = equal_lr(conv)
 
     def forward(self, input):
         return self.conv(input)
@@ -152,13 +152,13 @@ class StyledConvBlock(nn.Module):
             if upsample:
                 self.conv1 = nn.Sequential(
                     nn.Upsample(scale_factor=2, mode='nearest'),
-                    ScaledConv2d(
+                    EqualConv2d(
                         in_channel, out_channel, kernel_size, padding=padding
                     ),
                     Blur(out_channel),
                 )
             else:
-                self.conv1 = ScaledConv2d(
+                self.conv1 = EqualConv2d(
                     in_channel, out_channel, kernel_size, padding=padding
                 )
 
@@ -166,7 +166,7 @@ class StyledConvBlock(nn.Module):
         self.adain1 = AdaptiveInstanceNorm(out_channel, style_dim)
         self.lrelu1 = nn.LeakyReLU(0.2)
 
-        self.conv2 = ScaledConv2d(out_channel, out_channel, kernel_size, padding=padding)
+        self.conv2 = EqualConv2d(out_channel, out_channel, kernel_size, padding=padding)
         self.noise2 = NoiseInjection(out_channel)
         self.adain2 = AdaptiveInstanceNorm(out_channel, style_dim)
         self.lrelu2 = nn.LeakyReLU(0.2)
@@ -196,21 +196,21 @@ class ConvBlock(nn.Module):
     ):
         super().__init__()
         self.conv1 = nn.Sequential(
-            ScaledConv2d(in_channel, out_channel, kernel_size, padding=padding),
+            EqualConv2d(in_channel, out_channel, kernel_size, padding=padding),
             nn.LeakyReLU(0.2),
         )
 
         if downsample:
             self.conv2 = nn.Sequential(
                 Blur(out_channel),
-                ScaledConv2d(out_channel, out_channel, kernel_size, padding=padding),
+                EqualConv2d(out_channel, out_channel, kernel_size, padding=padding),
                 nn.AvgPool2d(2),
                 nn.LeakyReLU(0.2),
             )
 
         else:
             self.conv2 = nn.Sequential(
-                ScaledConv2d(out_channel, out_channel, kernel_size, padding=padding),
+                EqualConv2d(out_channel, out_channel, kernel_size, padding=padding),
                 nn.LeakyReLU(0.2),
             )
 
