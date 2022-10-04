@@ -15,7 +15,7 @@ These features for editing would probably include hair colour, eye colour, etc.,
 
 ## Current results
 Sample generated images, produced by GAN: <br/>
-![img.png](img.png)
+![img.png](images/img.png)
 Current results are far from perfect, but we will try to fix it in the future. Possible solutions are to try different, bigger dataset or to change model architecture.
 
 As we stated before, we generated and labelled 10K samples. The dataset statistics is the following (the rest of values is NaN):
