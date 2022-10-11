@@ -14,13 +14,13 @@ class Generator(nn.Module):
         self.progression = nn.ModuleList(
             [
               StyledConvBlock(512, 512, 3, 1, initial=True),
+              StyledConvBlock(512, 512, 3, 1, upsample=True),
               StyledConvBlock(512, 256, 3, 1, upsample=True),
               StyledConvBlock(256, 128, 3, 1, upsample=True),
               StyledConvBlock(128, 64, 3, 1, upsample=True),
-              StyledConvBlock(64, 32, 3, 1, upsample=True),
             ]
         )
-        self.to_rgb = EqualConv2d(32, 3, 1)
+        self.to_rgb = EqualConv2d(64, 3, 1)
 
     def forward(self, x, noise=None, step=0):
         batch = x.size(0)
@@ -41,17 +41,17 @@ class Discriminator(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv = nn.Sequential(
-            EqualConv2d(3, 16, 1),
+            EqualConv2d(3, 32, 1), 
             nn.LeakyReLU(0.2),
-            ConvBlock(16, 32, 3, 1, downsample=True),
             ConvBlock(32, 64, 3, 1, downsample=True),
             ConvBlock(64, 128, 3, 1, downsample=True),
             ConvBlock(128, 256, 3, 1, downsample=True),
-            EqualConv2d(256, 256, 4, padding=0),
+            ConvBlock(256, 512, 3, 1, downsample=True),
+            EqualConv2d(512, 512, 4, padding=0),
             nn.LeakyReLU(0.2),
         )
-        self.linear = nn.Linear(256, 1)
-
+        self.linear = nn.Linear(512, 1)
+    
     def forward(self, x):
         x = self.conv(x).reshape(x.size(0), -1)
         return torch.sigmoid(self.linear(x))
