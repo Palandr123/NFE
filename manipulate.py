@@ -62,7 +62,7 @@ def get_conditional_boundary(boundary, preserved_features=None):
         return boundary
     cond = []
     for feature in preserved_features:
-        cond.append(feature2svm[feature])
+        cond.append(feature2svm[feature].coef_)
     cond = np.vstack(cond)
     A = np.matmul(cond, cond.T)
     B = np.matmul(cond, boundary.T)
