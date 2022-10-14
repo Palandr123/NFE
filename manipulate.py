@@ -1,9 +1,12 @@
+import random
+
 from sklearn.svm import SVC
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import pickle
 import os
+import random
 import numpy as np
 import pandas as pd
 
@@ -66,3 +69,35 @@ def get_conditional_boundary(boundary, preserved_features=None):
     x = np.linalg.solve(A, B)
     new = boundary - (np.matmul(x.T, cond))
     return new / np.linalg.norm(new)
+
+
+def manipulate(z, feature, value, preserved_features=None, start=-10.0, end=10.0, steps=11, z_dim=512):
+    """
+    Manipulate the image in the desired attribute
+    :param z: latent code to be manipulated
+    :param feature: feature to be changed
+    :param value: desired target value of the feature
+    :param preserved_features: features to be preserved
+    :param start: The distance to the boundary where the manipulation starts
+    :param end:
+    :param steps:
+    :param z_dim:
+    :return:
+    """
+    if not os.path.exists(f'svm_{feature}.sav'):
+        vectors = np.loadtxt("vectors.csv", delimiter=",")
+        svm = get_boundary(vectors, attributes, feature)
+    else:
+        svm = feature2svm[feature]
+    if z.shape == 1:
+        z = z.reshape((-1, z_dim))
+    init_value = svm.predict(z)
+    value = class2value[feature][value]
+    if value == init_value:
+        value = random.choice([i for i in range(len(class2value[feature])) if i != init_value])
+    boundary_idx = 0
+    boundary_idx += sum([len(class2value[feature])-i-1 for i in range(min(init_value, value))])
+    boundary_idx += abs(init_value-value-1)
+    boundary = get_conditional_boundary(svm[boundary_idx], preserved_features)
+    linspace = np.linspace(start, end, steps) - z.dot(boundary.T)
+    return z + linspace * boundary
