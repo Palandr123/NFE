@@ -71,7 +71,7 @@ def get_conditional_boundary(boundary, preserved_features=None):
     return new / np.linalg.norm(new)
 
 
-def manipulate(z, feature, value, preserved_features=None, start=-10.0, end=10.0, steps=11, z_dim=512):
+def manipulate(z, feature, value, preserved_features=None, start=-3.0, end=3.0, steps=6, z_dim=512):
     """
     Manipulate the image in the desired attribute
     :param z: latent code to be manipulated
