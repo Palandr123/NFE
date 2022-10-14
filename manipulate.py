@@ -91,7 +91,7 @@ def manipulate(z, feature, value, preserved_features=None, start=-10.0, end=10.0
         svm = feature2svm[feature]
     if len(z.shape) == 1:
         z = z.reshape((-1, z_dim))
-    init_value = svm.predict(z)
+    init_value = svm.predict(z)[0]
     value = class2value[feature][value]
     if value == init_value:
         value = random.choice([i for i in range(len(class2value[feature])) if i != init_value])
