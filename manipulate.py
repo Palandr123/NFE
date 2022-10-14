@@ -79,10 +79,10 @@ def manipulate(z, feature, value, preserved_features=None, start=-10.0, end=10.0
     :param value: desired target value of the feature
     :param preserved_features: features to be preserved
     :param start: The distance to the boundary where the manipulation starts
-    :param end:
-    :param steps:
-    :param z_dim:
-    :return:
+    :param end: The distance to the boundary where the manipulation ends
+    :param steps: Number of manipulation steps between start and end
+    :param z_dim: dimensionality of latent vector
+    :return: list of manipulated latent vectors
     """
     if not os.path.exists(os.path.join(root, f'svm_{feature}.sav')):
         vectors = np.loadtxt(os.path.join(root, "vectors.csv"), delimiter=",")
