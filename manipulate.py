@@ -84,8 +84,8 @@ def manipulate(z, feature, value, preserved_features=None, start=-10.0, end=10.0
     :param z_dim:
     :return:
     """
-    if not os.path.exists(f'svm_{feature}.sav'):
-        vectors = np.loadtxt("vectors.csv", delimiter=",")
+    if not os.path.exists(os.path.join(root, f'svm_{feature}.sav')):
+        vectors = np.loadtxt(os.path.join(root, "vectors.csv"), delimiter=",")
         svm = get_boundary(vectors, attributes, feature)
     else:
         svm = feature2svm[feature]
