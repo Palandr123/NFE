@@ -97,7 +97,7 @@ def manipulate(z, feature, value, preserved_features=None, start=-3.0, end=3.0, 
         value = random.choice([i for i in range(len(class2value[feature])) if i != init_value])
     boundary_idx = 0
     boundary_idx += sum([len(class2value[feature])-i-1 for i in range(min(init_value, value))])
-    boundary_idx += abs(init_value-value-1)
+    boundary_idx += abs(init_value-value)-1
     boundary = get_conditional_boundary(svm.coef_[boundary_idx], preserved_features)
     linspace = np.linspace(start, end, steps) - z.dot(boundary.T)
     return z + linspace.reshape(steps, 1) * boundary.reshape(1, -1)
