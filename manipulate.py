@@ -89,7 +89,7 @@ def manipulate(z, feature, value, preserved_features=None, start=-10.0, end=10.0
         svm = get_boundary(vectors, attributes, feature)
     else:
         svm = feature2svm[feature]
-    if len(z.shape == 1):
+    if len(z.shape) == 1:
         z = z.reshape((-1, z_dim))
     init_value = svm.predict(z)
     value = class2value[feature][value]
