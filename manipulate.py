@@ -100,4 +100,4 @@ def manipulate(z, feature, value, preserved_features=None, start=-10.0, end=10.0
     boundary_idx += abs(init_value-value-1)
     boundary = get_conditional_boundary(svm.coef_[boundary_idx], preserved_features)
     linspace = np.linspace(start, end, steps) - z.dot(boundary.T)
-    return z + linspace * boundary
+    return z + linspace.reshape(steps, 1) * boundary.reshape(1, -1)
