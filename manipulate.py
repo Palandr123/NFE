@@ -59,7 +59,7 @@ def get_conditional_boundary(boundary, preserved_features=None):
     :return: modified separating hyperplane
     """
     if preserved_features is None:
-        return boundary
+        return boundary / np.linalg.norm(boundary)
     cond = []
     for feature in preserved_features:
         cond.append(feature2svm[feature].coef_)
