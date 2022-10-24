@@ -40,7 +40,7 @@ def get_boundary(vectors, attributes, feature):
     label_encoder = LabelEncoder()
     y = label_encoder.fit_transform(y)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=0)
-    svm = SVC(kernel="linear")
+    svm = SVC(kernel="linear", C=100)
     svm.fit(X_train, y_train)
     y_pred = svm.predict(X_train)
     print(f"Train accuracy: {accuracy_score(y_train, y_pred)}")
