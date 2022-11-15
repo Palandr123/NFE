@@ -33,16 +33,26 @@ Sample generated images, produced by GAN: <br/>
 ![samples](images/samples.png)
 
 ### Image Manipulation
+After getting separating hyperplanes, we implemented the way of attribute manipulation from [1]. Specifically, given the separating hyperplane n and the latent vector z, we generate several images using $z+an$, where `a=np.linspace(-3, 3, 6)`. Examples of image manipulation:
+1. Making hair more (or less) green while keeping the hair length
+![change_color_green](images/change_color_green.png)
+2. Making hair more (or less) red without controlling the hair length
+![change_color](images/change_color.png)
+3. Changing the hair length preserving the hair colour
+![change_length](images/change_length.png)
+4. Changing the hair length without controlling the hair colour
+![change_color_length](images/change_color_length.png)
 
+As we can see, both usual and conditional manipulation work well. However, it is not successful for eyes since the labelled annotator performed bad on eye colour. As a result, separating hyperplanes for eye colour are very far from the true ones.
 
 ### GAN Inversion
 Some preliminary results to access quality of GAN inversion:
 
-<img align="left" width="275" height="275" src=images/gi11.png>
-<img align="center" width="275" height="275" src=images/gi12.png>
+<img align="left" width="138" height="138" src=images/gi11.png>
+<img align="center" width="138" height="138" src=images/gi12.png>
 
-<img align="left" width="275" height="275" src=images/gi21.png>
-<img align="center" width="275" height="275" src=images/gi22.png>
+<img align="left" width="138" height="138" src=images/gi21.png>
+<img align="center" width="138" height="138" src=images/gi22.png>
 
 ### Telegram Bot
 We also created telegram bot for our project, which is currently hosted on local computer and thus is not available 24/7. Alias: [@neural_face_editor_bot](https://t.me/neural_face_editor_bot)
