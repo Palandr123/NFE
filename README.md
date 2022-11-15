@@ -34,8 +34,15 @@ Sample generated images, produced by GAN: <br/>
 
 ### Image Manipulation
 
-### GAN Inversion
 
+### GAN Inversion
+Some preliminary results to access quality of GAN inversion:
+
+<img align="left" width="275" height="275" src=images/gi11.png>
+<img align="center" width="275" height="275" src=images/gi12.png>
+
+<img align="left" width="275" height="275" src=images/gi21.png>
+<img align="center" width="275" height="275" src=images/gi22.png>
 
 ### Telegram Bot
 We also created telegram bot for our project, which is currently hosted on local computer and thus is not available 24/7. Alias: [@neural_face_editor_bot](https://t.me/neural_face_editor_bot)
