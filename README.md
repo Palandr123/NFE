@@ -47,6 +47,11 @@ At this step, telegram bot uses trained StyleGAN to generate random anime faces.
 Here are some examples of bot interaction:
 
 
+<img align="left" width="240" height="376" src=images/welcome.png>
+<img align="left" width="229" height="218" src=images/tggen.png>
+<img align="center" width="238" height="351" src=images/tgexamples.png>
+<br/>
+
 ## References
 [1] Shen, Y., Gu, J., Tang, X., & Zhou, B. (2019). Interpreting the Latent Space of GANs for Semantic Face Editing. arXiv. https://doi.org/10.48550/arXiv.1907.10786 <br/>
 [2] Upchurch, P., Gardner, J., Pleiss, G., Pless, R., Snavely, N., Bala, K., & Weinberger, K. (2016). Deep Feature Interpolation for Image Content Changes. arXiv. https://arxiv.org/abs/1611.05507v2
