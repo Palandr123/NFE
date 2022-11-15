@@ -30,8 +30,8 @@ Stage 3 is image classification. For the each attribute we want to be able to co
 
 ## Current Results
 Sample generated images, produced by GAN: <br/>
-![img.png](images/img.png)
-Current results are far from perfect, but we will try to fix it in the future. Possible solutions are to try different, bigger dataset or to change model architecture.
+![samples](images/samples.png)
+![samples64](images/samples64.png)
 
 As we stated before, we generated and labelled 10K samples. The dataset statistics is the following (the rest of values is NaN):
 - Hair length <br/>
