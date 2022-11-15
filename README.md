@@ -31,19 +31,21 @@ Stage 3 is image classification. For the each attribute we want to be able to co
 ## Current Results
 Sample generated images, produced by GAN: <br/>
 ![samples](images/samples.png)
-![samples64](images/samples64.png)
 
-As we stated before, we generated and labelled 10K samples. The dataset statistics is the following (the rest of values is NaN):
-- Hair length <br/>
-  ![Untitled](images/img1.png)
-- Hair colour <br/>
-  ![Untitled](images/img2.png)
-- Eye colour <br/>
-  ![Untitled](images/img3.png)
-  
-As we can see, there are a lot of NaN values. This is because the results are far from realistic ones and tagging tool is not 100% accurate (as it is a neural network)
+### Image Manipulation
 
-In the future work , we may consider adding other attributes such as “Smile” and “Blush” or even “Quality” (to fix the artifacts) made by GAN.
+### GAN Inversion
+
+
+### Telegram Bot
+We also created telegram bot for our project, which is currently hosted on local computer and thus is not available 24/7. Alias: [@neural_face_editor_bot](https://t.me/neural_face_editor_bot)
+
+This bot is intended to download anime faces photos from the users (or generate random ones) and allow to change some image attributes in the convenient telegram interface.
+
+At this step, telegram bot uses trained StyleGAN to generate random anime faces. Intro message is available by `/help`*.* Send `/face` to try generating random images! (when bot would be online...)
+
+Here are some examples of bot interaction:
+
 
 ## References
 [1] Shen, Y., Gu, J., Tang, X., & Zhou, B. (2019). Interpreting the Latent Space of GANs for Semantic Face Editing. arXiv. https://doi.org/10.48550/arXiv.1907.10786 <br/>
