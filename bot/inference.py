@@ -1,5 +1,5 @@
 import sys
-
+sys.path.append(r"D:\Education\Innopolis\s7\pml\Project\NFE")
 from StyleGAN import *
 
 
@@ -14,5 +14,5 @@ def inference():
         return img
 
 
-if name == 'main':
+if __name__ == '__main__':
     inference()
