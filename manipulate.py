@@ -7,9 +7,10 @@ import os
 import random
 import numpy as np
 import pandas as pd
+import torch
 
 
-root = os.path.dirname(os.path.abspath(__file__))
+root = os.path.dirname(os.path.abspath(__file__)) + '\\data'
 properties = ["hair", "hair_length", "eyes"]
 feature2svm = {}
 class2value = {}
@@ -83,6 +84,7 @@ def manipulate(z, feature, value, preserved_features=None, start=-3.0, end=3.0, 
     :return: list of manipulated latent vectors
     """
     if not os.path.exists(os.path.join(root, f'svm_{feature}.sav')):
+        raise AssertionError('No svm found')
         vectors = np.loadtxt(os.path.join(root, "vectors.csv"), delimiter=",")
         svm = get_boundary(vectors, attributes, feature)
     else:
