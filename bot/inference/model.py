@@ -20,8 +20,15 @@ from sklearn.svm import SVC
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
 
+"""
+Class storing NFE GAN variables and methods
+"""
+
 
 class NFEModel():
+    """
+    Load models and init image manipulation svm
+    """
 
     def __init__(self, root):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -43,6 +50,9 @@ class NFEModel():
             label_encoder.fit(y)
             self.class2value[i] = dict(zip(label_encoder.classes_, label_encoder.transform(label_encoder.classes_)))
 
+    """
+    Apply generator on latent vector z.
+    """
 
     def apply_generator(self, z):
         step = int(math.log(64, 2)) - 2
@@ -51,17 +61,30 @@ class NFEModel():
             img = self.G(z, step=step)[0]
         return img
 
+    """
+    Generate image from latent vector z and save image by imgpath.
+    """
+
     def generate_and_save_image(self, z, imgpath):
         img = self.apply_generator(z)
         imgdata = torch.clip(img, 0, 1).permute([1, 2, 0]).detach().cpu().numpy()
         plt.imsave(imgpath, imgdata)
+
+    """
+    Generate random latent vector z, get image from generator and save by imgpath.
+    """
 
     def generate_and_save_random_image(self, imgpath):
         z = torch.randn((1, 512))
         self.generate_and_save_image(z, imgpath)
         return z
 
+    """
+    Perform GAN inversion model training.
+    """
+
     def gan_inversion(self, imgpath):
+        # transform image
         transform = transforms.Compose([
             transforms.Resize((64, 64)),
             transforms.ToTensor(),
@@ -153,17 +176,24 @@ class NFEModel():
         linspace = np.linspace(start, end, steps) - z.dot(boundary.T)
         return z + linspace.reshape(steps, 1) * boundary.reshape(1, -1)
 
+    """
+    Return array of pictures by filepaths
+    """
     def picture_array(self, filepaths):
         pics = []
         for filepath in filepaths:
             pics.append(open(filepath, 'rb'))
         return pics
 
+    """
+    Image manipulation wrapper function.
+    """
     def change_image(self, path_prefix, z, feature='hair', value='green', preserved_features=None):
         img_size = 64
         z_s = self.manipulate(z, feature, value, preserved_features, start=-5.0, end=5.0)
         step = int(math.log(img_size, 2)) - 2
         pics = []
+        # save generated images and return to the user
         filepath = '{}-fig{}.png'
         for i, z in enumerate(z_s):
             z = torch.tensor(z).to(self.device)
@@ -173,4 +203,3 @@ class NFEModel():
             plt.imsave(filepath.format(path_prefix, i), img)
             pics.append(open(filepath.format(path_prefix, i), 'rb'))
         return pics
-

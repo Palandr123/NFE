@@ -1,5 +1,8 @@
 import torch.nn as nn
 
+"""
+Declaration of GAN Inversion modules
+"""
 
 class ResBlock(nn.Module):
     def __init__(self,in_channels, out_channels):
