@@ -121,6 +121,7 @@ Perform GAN inversion on photo sent.
 def upload_and_inversion(message):
     if not torch.cuda.is_available():
         bot.send_message(message.chat.id, 'Cuda is not available. Please generate random face with /face instead!')
+        return
     # get photo from user
     bot.send_message(message.chat.id, 'Doing GAN inversion on your image. Please wait...')
     fileID = message.photo[-1].file_id
