@@ -41,11 +41,13 @@ class NFEModel():
         self.dataroot = os.path.join(root, "data")
         path = os.path.join(self.dataroot, "attributes.csv")
         attributes = pd.read_csv(path)
+        self.property_to_options = {}
         for i in self.properties:
             filename = f'svm_{i}.sav'
             svm = pickle.load(open(os.path.join(self.dataroot, filename), 'rb'))
             self.feature2svm[i] = svm
             y = attributes[~attributes[i].isna()][i]
+            self.property_to_options[i] = y.unique()
             label_encoder = LabelEncoder()
             label_encoder.fit(y)
             self.class2value[i] = dict(zip(label_encoder.classes_, label_encoder.transform(label_encoder.classes_)))
